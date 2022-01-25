@@ -1,0 +1,24 @@
+server:
+  port: 80
+
+dubbo:
+  application:
+    name: health_mobile   #注册中心名称
+  registry:
+    address: zookeeper://127.0.0.1:2181
+#    base-packages: com.zqjy.service
+
+spring:
+  #  redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 30000
+    jedis:
+      pool:
+        max-idle: 50
+#        设置上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

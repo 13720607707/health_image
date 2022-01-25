@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.health.dao.CheckGroupDao">
+    <resultMap id="baseResultMap" type="com.health.pojo.CheckGroup">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+    </resultMap>
+    <resultMap id="findByIdResultMap" type="com.health.pojo.CheckGroup" extends="baseResultMap">
+<!--        检查组和检查项多对多关联查询-->
+        <collection property="checkItems" ofType="com.health.pojo.CheckItem"
+        column="id"
+        select="com.health.dao.CheckitemDao.findCheckItemById">
+
+
+        </collection>
+    </resultMap>
+
+
+
+    <!--新增-->
+    <insert id="add" parameterType="com.health.pojo.CheckGroup">
+
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_checkgroup(code,name,sex,helpCode,remark,attention)
+                      values
+        (#{code},#{name},#{sex},#{helpCode},#{remark},#{attention})
+    </insert>
+    <!--设置两表多对多关系-->
+    <insert id="setCheckGroupAndCheckItem" parameterType="map">
+        insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+        values
+        (#{checkgroupId},#{checkitemId})
+    </insert>
+    <select id="findByCondition" parameterType="string" resultType="com.health.pojo.CheckGroup">
+        select * from t_checkgroup
+        <if test="value != null and value.length > 0">
+            where code = #{value} or name = #{value} or helpCode = #{value}
+        </if>
+    </select>
+    <select id="findById" parameterType="int" resultType="com.health.pojo.CheckGroup">
+        select * from t_checkgroup where id=#{id}
+    </select>
+    <select id="findCheckItemIdsByCheckGroupId" parameterType="int" resultType="int">
+        select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{id}
+    </select>
+<!--   根据OD动态修改检查组相关字段 -->
+    <update id="edit" parameterType="com.health.pojo.CheckGroup">
+        update t_checkgroup
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="helpCode != null">
+                helpCOde = #{helpCode},
+            </if>
+
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+<!--    清理检查项关联信息-->
+    <delete id="deleteAssocication" parameterType="int">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{id};
+    </delete>
+
+    <select id="findAll" resultType="com.health.pojo.CheckGroup">
+        select * from t_checkgroup
+    </select>
+    <select id="findCheckGroupById" parameterType="int" resultMap="findByIdResultMap">
+        select * from t_checkgroup where id in (select checkgroup_id from t_setmeal_checkgroup where setmeal_id=#{id})
+    </select>
+    <!--    根据检查组id统计数据量-->
+    <select id="findCountByCheckgroupId" parameterType="int" resultType="long">
+        select count(*) from t_setmeal_checkgroup where checkgroup_id =#{id}
+    </select>
+
+    <select id="deleteById" parameterType="int" resultType="long">
+        delete  from  t_checkgroup where id=#{id}
+    </select>
+</mapper>

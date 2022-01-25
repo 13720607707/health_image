@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.health.dao.RoleDao">
+    <select id="findByUserId"
+            parameterType="int"
+            resultType="com.health.pojo.Role">
+        select  r.*
+      		from t_role as r ,t_user_role as ur
+      		where r.id = ur.role_id and ur.user_id = #{userId}
+    </select>
+
+    <!--    分页查询-->
+    <select id="findPage" parameterType="string" resultType="com.health.pojo.Role">
+        select * from t_role
+        <if test="value != null and value.length > 0">
+            where name like concat('%',#{value},'%')
+        </if>
+    </select>
+    <select id="findAllPremission" resultType="com.health.pojo.Permission">
+        select * from t_permission
+    </select>
+    <!--添加角色-->
+    <insert id="add" parameterType="com.health.pojo.Role">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_role(id,name,keyword,description)
+        values
+        (#{id},#{name},#{keyword},#{description})
+    </insert>
+    <!--设置两表多对多关系-->
+    <insert id="setRoleAndPermissions" parameterType="map">
+        insert into t_role_permission(role_id,permission_id)
+        values
+        (#{roleId},#{perId})
+    </insert>
+    <!--    清理关联信息-->
+    <delete id="deleteAssocication" parameterType="int" >
+        delete from t_role_permission where role_id = #{id};
+    </delete>
+    <delete id="deleteRole" parameterType="int" >
+        delete from t_role where id=#{id}
+    </delete>
+
+    <!--通过角色id查询用户-->
+    <select id="findUsById" parameterType="int" resultType="com.health.pojo.User">
+        select * from t_user where id in (select user_id from t_user_role where role_id = #{id})
+    </select>
+<!--    根据角色id查权限-->
+    <select id="findPermissionIdByrid" parameterType="int" resultType="int">
+        select permission_id from t_role_permission where role_id = #{id};
+    </select>
+
+
+
+    <!--    编辑role表-->
+    <update id="edit" parameterType="com.health.pojo.Role" >
+        update t_role
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
