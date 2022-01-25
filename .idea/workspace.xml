@@ -16,6 +16,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -26,6 +29,7 @@
     </option>
   </component>
   <component name="ProjectId" id="23B8rQzdDHhrQTaBuD6viDsDbzU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
@@ -102,12 +106,26 @@
       <workItem from="1642486024051" duration="601000" />
       <workItem from="1642509892373" duration="1291000" />
       <workItem from="1642651355491" duration="604000" />
-      <workItem from="1643107458682" duration="594000" />
+      <workItem from="1643107458682" duration="807000" />
     </task>
+    <task id="LOCAL-00001" summary="1.0后台完成">
+      <created>1643108898840</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1643108898840</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="1.0后台完成" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.0后台完成" />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="223" key="#com.intellij.ide.util.MemberChooser" timestamp="1642333254650">
